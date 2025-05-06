@@ -1,15 +1,53 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Tamanho {
+  PADRAO
+  PEQUENO
+  MEDIO
+  EXTRA
+  JUMBO
+}
+
+enum Tipo {
+  BRANCO
+  VERMELHO
+  CODORNA
+}
+
+model Produto {
+  id                String    @id @default(uuid())
+  nome              String
+  tipo              Tipo
+  tamanho           Tamanho
+  unidadeMedida     String    @default("DUZIA")
+  precoCusto        Decimal   @db.Decimal(10, 2)
+  precoVenda        Decimal   @db.Decimal(10, 2)
+  estoque Int
+  ativo             Boolean   @default(true)
+  criadoEm          DateTime  @default(now())
+  atualizadoEm      DateTime  @updatedAt
+
+  movimentacoes     Movimentacao[]
+}
+
+enum TipoMovimentacao {
+  ENTRADA
+  SAIDA
+}
+
+model Movimentacao {
+  id            String          @id @default(uuid())
+  tipo          TipoMovimentacao
+  produtoId     String
+  produto       Produto         @relation(fields: [produtoId], references: [id])
+  quantidade    Int
+  precoUnitario Decimal         @db.Decimal(10, 2)
+  data          DateTime        @default(now())
 }
