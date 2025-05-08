@@ -1,31 +1,46 @@
 import { Request, Response } from 'express'
 import * as productService from '../services/product.service'
-import { CreateProductDTO } from '../schemas/product.schema'
+import { CreateProductDTO, UpdateProductDTO } from '../schemas/product.schema'
 
 export const getAllProducts = async (_req: Request, res: Response) => {
     try {
         const products = await productService.getAll()
         res.status(200).json(products)
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch products' })
+        res.status(500).json({ error: 'falha ao buscar produtos' })
     }
 }
 
 export const createProduct = async (req: Request, res: Response) => {
+    const product: CreateProductDTO = req.body
+    
     try {
-        const product: CreateProductDTO = req.body
         const newProduct = await productService.create(product)
         res.status(201).json(newProduct)
     } catch (error) {
-        res.status(400).json({ error: 'Failed to create product' })
+        res.status(400).json({ error: 'falha ao criar produto' })
     }
 }
 
 export const getProductById = async (req: Request, res: Response) => {
     const { id } = req.params
-    const product = await productService.getById(id)
-    if (!product) {
-        return res.status(404).json({ error: 'Product not found' })
+    try {
+        const product = await productService.getById(id)
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(400).json({ error: 'falha ao buscar produto'})
     }
-    res.status(200).json(product)
+}
+
+export const updateProduct = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const updateProduct: UpdateProductDTO = req.body
+    
+    try {
+        const updatedProduct = await productService.update(id, updateProduct)
+        res.status(200).json(updatedProduct)
+    } catch (error) {
+        res.status(400).json({ error: 'falha ao atualizar produto'})
+    }
+    
 }
