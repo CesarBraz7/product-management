@@ -30,3 +30,9 @@ export const update = async (id: string, product: UpdateProductDTO): Promise<Pro
     data: product
   })
 }
+
+export const deleteById = async (id: string): Promise<Produto> => {
+  return await prisma.produto.delete({
+    where: { id }
+  })
+}

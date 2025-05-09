@@ -43,3 +43,13 @@ export const update = async (id: string, product: UpdateProductDTO) => {
 
     return await productRepository.update(id, product)
 }
+
+export const deleteById = async (id: string) => {
+    const product = await productRepository.findById(id)
+
+    if (!product) {
+        throw new Error('produto não encontrado')
+    }
+
+    return await productRepository.deleteById(id)
+}
