@@ -8,25 +8,25 @@ export const findAll = async (): Promise<Produto[]> => {
 
 export const findById = async (id: string): Promise<Produto | null> => {
   return await prisma.produto.findUnique({
-    where: { id },
+    where: { id }
   })
 }
 
 export const findByName = async (nome: string): Promise<Produto | null> => {
   return await prisma.produto.findFirst({
-    where: { nome },
+    where: { nome }
   })
 }
 
 export const create = async (product: CreateProductDTO): Promise<Produto> => {
   return await prisma.produto.create({
-    data: product,
+    data: product
   })
 }
 
 export const update = async (id: string, product: UpdateProductDTO): Promise<Produto> => {
   return await prisma.produto.update({
     where: { id },
-    data: product,
+    data: product
   })
 }
