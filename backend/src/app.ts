@@ -11,7 +11,7 @@ app.use(express.json())
 app.use('/api/products', productRoutes.default)
 app.use('/api/transactions', transactionRoutes.default)
 
-app.get('/ping', (req, res) => {
+app.get('/ping', (_req, res) => {
   res.send('pong')
 })
 
